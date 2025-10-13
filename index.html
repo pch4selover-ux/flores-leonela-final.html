@@ -3,360 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Una Sorpresa Para Ti</title>
+    <title>Una Sorpresa para Leonela</title>
     <style>
-        /* --- 1. Estilos Generales de la Página --- */
-        /* Esto le da a toda la página un fondo suave y centra el contenido. */
+        /* CSS para el fondo y la atmósfera romántica */
         body {
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0); /* Un degradado rosa suave */
-            font-family: 'Arial', sans-serif;
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle, #ffdde1, #ee9ca7);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            overflow: hidden; /* Evita que aparezcan barras de desplazamiento */
+            font-family: 'Georgia', serif;
         }
 
-        /* --- 2. Contenedor Principal --- */
-        /* Este es el contenedor que aloja tanto la caja como las cartas. */
-        .container {
-            position: relative;
-            perspective: 1000px; /* Necesario para efectos 3D sutiles */
+        .interactive-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none; /* Permite hacer clic a través del fondo */
+            z-index: -1;
         }
 
-        /* --- 3. Estilos de la Caja Sorpresa --- */
-        /* Aquí diseñamos la caja de regalo. */
-        .gift-box {
+        /* Estilos para la caja de sorpresa */
+        .surprise-box {
             position: relative;
             width: 200px;
             height: 200px;
-            cursor: pointer; /* Cambia el cursor a una manito para indicar que se puede hacer clic */
-            transition: transform 0.5s;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        .gift-box:hover {
-            transform: scale(1.1); /* Agranda un poco la caja al pasar el mouse por encima */
+        .surprise-box:hover {
+            transform: scale(1.1);
         }
 
-        /* La base de la caja */
-        .gift-box::before {
+        .box-lid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 210px;
+            height: 60px;
+            background-color: #ff8fab;
+            border: 2px solid #fff;
+            border-radius: 10px 10px 0 0;
+            transform-origin: bottom;
+            transition: transform 0.5s ease-in-out;
+            z-index: 2;
+        }
+
+        .box-body {
+            position: absolute;
+            bottom: 0;
+            left: 10px;
+            width: 190px;
+            height: 140px;
+            background-color: #ffc2d1;
+            border: 2px solid #fff;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .box-body::before {
             content: '';
             position: absolute;
-            width: 200px;
-            height: 200px;
-            background-color: #ff80ab; /* Un rosa más intenso */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            border-radius: 12px;
-        }
-
-        /* La tapa de la caja */
-        .gift-box::after {
-            content: '';
-            position: absolute;
-            width: 220px;
-            height: 50px;
-            background-color: #f06292; /* Un tono de rosa para la tapa */
-            top: -25px;
-            left: -10px;
-            border-radius: 10px;
-            transition: all 0.5s ease-in-out;
-        }
-
-        /* El lazo vertical */
-        .ribbon-v {
-            position: absolute;
-            width: 30px;
-            height: 200px;
-            background: #e91e63; /* Color del lazo */
-            left: 85px;
-        }
-
-        /* El lazo horizontal */
-        .ribbon-h {
-            position: absolute;
-            width: 220px;
-            height: 30px;
-            background: #e91e63;
-            top: -15px;
-            left: -10px;
-        }
-
-        /* --- 4. Animación de Apertura de la Caja --- */
-        /* Esta clase 'open' se añadirá con JavaScript cuando se haga clic. */
-        .gift-box.open::after {
-            transform: translateY(-150px) rotate(25deg); /* Mueve la tapa hacia arriba y la gira */
-            opacity: 0; /* La hace desaparecer */
-        }
-        
-        /* --- 5. Estilos de las Cartas de Amor --- */
-        /* Inicialmente, las cartas están ocultas y apiladas. */
-        .letter-card {
-            position: absolute;
-            width: 220px;
-            padding: 20px;
-            background: #ffffff;
-            border-left: 5px solid #e91e63;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-            border-radius: 8px;
             top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(0deg) scale(0); /* Empiezan invisibles y pequeñas */
-            opacity: 0;
-            transition: all 0.6s ease-out;
-            text-align: center;
-            color: #333;
-        }
-
-        /* --- 6. Animación para Mostrar las Cartas --- */
-        /* La clase 'show' se añadirá con JavaScript para revelar cada carta. */
-        .letter-card.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1); /* Las hace visibles y de tamaño normal */
+            left: -2px;
+            width: 194px;
+            height: 40px;
+            background-color: #ff8fab;
+            transform: translateY(-50%);
         }
         
-        /* Posicionamos cada carta de manera un poco diferente para un efecto escalonado. */
-        .letter-card.show:nth-child(1) {
-            transform: translate(-150%, -150%) rotate(-15deg) scale(1);
-            transition-delay: 0.5s; /* Retraso para que aparezcan en orden */
+        /* Animación de apertura de la caja */
+        .surprise-box.open .box-lid {
+            transform: translateY(-20px) rotate(-20deg);
         }
 
-        .letter-card.show:nth-child(2) {
-            transform: translate(50%, -100%) rotate(10deg) scale(1);
-            transition-delay: 0.8s;
+        /* Estilos para las cartas de amor */
+        .letter {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            width: 150px;
+            padding: 15px;
+            background: #fff0f3;
+            border: 1px solid #ff8fab;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            opacity: 0;
+            transform: translate(-50%, 0) scale(0);
+            transition: all 1s ease-out;
+            text-align: center;
+            color: #555;
+            font-size: 14px;
         }
 
-        .letter-card.show:nth-child(3) {
-            transform: translate(-80%, 20%) rotate(5deg) scale(1);
-            transition-delay: 1.1s;
+        /* Estilos para el confeti */
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: #ff8fab;
+            opacity: 0;
+            border-radius: 50%;
         }
-
-        .letter-card.show:nth-child(4) {
-            transform: translate(30%, 70%) rotate(-10deg) scale(1);
-            transition-delay: 1.4s;
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="letters">
-            <div class="letter-card"><p>Para Leonela,<br>Cada vez que pienso en ti, el mundo se ilumina. Tu sonrisa es mi motivo favorito. ❤️</p></div>
-            <div class="letter-card"><p>No sé cómo lo haces, pero tienes la increíble capacidad de hacer que cualquier día malo se convierta en uno bueno.</p></div>
-            <div class="letter-card"><p>Quiero que sepas que me encantas de una manera que a veces ni yo entiendo. Eres simplemente increíble.</p></div>
-            <div class="letter-card"><p>Con todo mi cariño,<br><b>Peter</b></p></div>
-        </div>
-        
-        <div class="gift-box" id="giftBox">
-            <div class="ribbon-v"></div>
-            <div class="ribbon-h"></div>
-        </div>
+    <canvas class="interactive-bg"></canvas>
+
+    <div class="surprise-box" id="surpriseBox">
+        <div class="box-lid"></div>
+        <div class="box-body"></div>
     </div>
 
-    <script>
-        // --- 7. La Lógica de la Sorpresa (JavaScript) ---
-        // Este código espera a que alguien haga clic en la caja.
-
-        // Primero, seleccionamos los elementos del HTML con los que vamos a trabajar.
-        const giftBox = document.getElementById('giftBox');
-        const letterCards = document.querySelectorAll('.letter-card');
-
-        // Luego, creamos una función que se ejecutará cuando se haga clic en la caja.
-        giftBox.addEventListener('click', () => {
-            // 1. Añade la clase 'open' a la caja para que se active la animación de la tapa.
-            giftBox.classList.add('open');
-
-            // 2. Usamos un temporizador para que las cartas no aparezcan hasta que la tapa se haya movido.
-            setTimeout(() => {
-                // 3. Recorremos cada una de las cartas y les añadimos la clase 'show'.
-                letterCards.forEach(card => {
-                    card.classList.add('show');
-                });
-            }, 500); // 500 milisegundos = 0.5 segundos de espera
-        });
-    </script>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Una Sorpresa Para Ti</title>
-    <style>
-        /* --- 1. Estilos Generales de la Página --- */
-        /* Esto le da a toda la página un fondo suave y centra el contenido. */
-        body {
-            background: linear-gradient(135deg, #fce4ec, #f8bbd0); /* Un degradado rosa suave */
-            font-family: 'Arial', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            overflow: hidden; /* Evita que aparezcan barras de desplazamiento */
-        }
-
-        /* --- 2. Contenedor Principal --- */
-        /* Este es el contenedor que aloja tanto la caja como las cartas. */
-        .container {
-            position: relative;
-            perspective: 1000px; /* Necesario para efectos 3D sutiles */
-        }
-
-        /* --- 3. Estilos de la Caja Sorpresa --- */
-        /* Aquí diseñamos la caja de regalo. */
-        .gift-box {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            cursor: pointer; /* Cambia el cursor a una manito para indicar que se puede hacer clic */
-            transition: transform 0.5s;
-        }
-
-        .gift-box:hover {
-            transform: scale(1.1); /* Agranda un poco la caja al pasar el mouse por encima */
-        }
-
-        /* La base de la caja */
-        .gift-box::before {
-            content: '';
-            position: absolute;
-            width: 200px;
-            height: 200px;
-            background-color: #ff80ab; /* Un rosa más intenso */
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-            border-radius: 12px;
-        }
-
-        /* La tapa de la caja */
-        .gift-box::after {
-            content: '';
-            position: absolute;
-            width: 220px;
-            height: 50px;
-            background-color: #f06292; /* Un tono de rosa para la tapa */
-            top: -25px;
-            left: -10px;
-            border-radius: 10px;
-            transition: all 0.5s ease-in-out;
-        }
-
-        /* El lazo vertical */
-        .ribbon-v {
-            position: absolute;
-            width: 30px;
-            height: 200px;
-            background: #e91e63; /* Color del lazo */
-            left: 85px;
-        }
-
-        /* El lazo horizontal */
-        .ribbon-h {
-            position: absolute;
-            width: 220px;
-            height: 30px;
-            background: #e91e63;
-            top: -15px;
-            left: -10px;
-        }
-
-        /* --- 4. Animación de Apertura de la Caja --- */
-        /* Esta clase 'open' se añadirá con JavaScript cuando se haga clic. */
-        .gift-box.open::after {
-            transform: translateY(-150px) rotate(25deg); /* Mueve la tapa hacia arriba y la gira */
-            opacity: 0; /* La hace desaparecer */
-        }
-        
-        /* --- 5. Estilos de las Cartas de Amor --- */
-        /* Inicialmente, las cartas están ocultas y apiladas. */
-        .letter-card {
-            position: absolute;
-            width: 220px;
-            padding: 20px;
-            background: #ffffff;
-            border-left: 5px solid #e91e63;
-            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
-            border-radius: 8px;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(0deg) scale(0); /* Empiezan invisibles y pequeñas */
-            opacity: 0;
-            transition: all 0.6s ease-out;
-            text-align: center;
-            color: #333;
-        }
-
-        /* --- 6. Animación para Mostrar las Cartas --- */
-        /* La clase 'show' se añadirá con JavaScript para revelar cada carta. */
-        .letter-card.show {
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1); /* Las hace visibles y de tamaño normal */
-        }
-        
-        /* Posicionamos cada carta de manera un poco diferente para un efecto escalonado. */
-        .letter-card.show:nth-child(1) {
-            transform: translate(-150%, -150%) rotate(-15deg) scale(1);
-            transition-delay: 0.5s; /* Retraso para que aparezcan en orden */
-        }
-
-        .letter-card.show:nth-child(2) {
-            transform: translate(50%, -100%) rotate(10deg) scale(1);
-            transition-delay: 0.8s;
-        }
-
-        .letter-card.show:nth-child(3) {
-            transform: translate(-80%, 20%) rotate(5deg) scale(1);
-            transition-delay: 1.1s;
-        }
-
-        .letter-card.show:nth-child(4) {
-            transform: translate(30%, 70%) rotate(-10deg) scale(1);
-            transition-delay: 1.4s;
-        }
-
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <div class="letters">
-            <div class="letter-card"><p>Para Leonela,<br>Cada vez que pienso en ti, el mundo se ilumina. Tu sonrisa es mi motivo favorito. ❤️</p></div>
-            <div class="letter-card"><p>No sé cómo lo haces, pero tienes la increíble capacidad de hacer que cualquier día malo se convierta en uno bueno.</p></div>
-            <div class="letter-card"><p>Quiero que sepas que me encantas de una manera que a veces ni yo entiendo. Eres simplemente increíble.</p></div>
-            <div class="letter-card"><p>Con todo mi cariño,<br><b>Peter</b></p></div>
-        </div>
-        
-        <div class="gift-box" id="giftBox">
-            <div class="ribbon-v"></div>
-            <div class="ribbon-h"></div>
-        </div>
-    </div>
+    <div class="letter" id="letter1">Leonela, desde que te vi, mi mundo se llenó de una luz que no conocía. Cada día a tu lado es un regalo.</div>
+    <div class="letter" id="letter2">Tu sonrisa tiene el poder de alegrar mis días más grises. Eres mi sol particular.</div>
+    <div class="letter" id="letter3">Me encanta la forma en que tus ojos brillan cuando hablas de algo que te apasiona. Me podría perder en ellos.</div>
+    <div class="letter" id="letter4">No hay un solo día que no piense en ti. Te has convertido en mi más bonito pensamiento. Con todo mi cariño, Peter.</div>
 
     <script>
-        // --- 7. La Lógica de la Sorpresa (JavaScript) ---
-        // Este código espera a que alguien haga clic en la caja.
+        // JavaScript para la interactividad y las animaciones
+        const surpriseBox = document.getElementById('surpriseBox');
+        const letters = document.querySelectorAll('.letter');
+        const canvas = document.querySelector('.interactive-bg');
+        const ctx = canvas.getContext('2d');
 
-        // Primero, seleccionamos los elementos del HTML con los que vamos a trabajar.
-        const giftBox = document.getElementById('giftBox');
-        const letterCards = document.querySelectorAll('.letter-card');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+        let particles = [];
 
-        // Luego, creamos una función que se ejecutará cuando se haga clic en la caja.
-        giftBox.addEventListener('click', () => {
-            // 1. Añade la clase 'open' a la caja para que se active la animación de la tapa.
-            giftBox.classList.add('open');
+        // Clase para las partículas del fondo
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 2 + 1;
+                this.speedX = Math.random() * 3 - 1.5;
+                this.speedY = Math.random() * 3 - 1.5;
+                this.color = `rgba(255, 255, 255, ${Math.random()})`;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.size > 0.2) this.size -= 0.1;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
 
-            // 2. Usamos un temporizador para que las cartas no aparezcan hasta que la tapa se haya movido.
-            setTimeout(() => {
-                // 3. Recorremos cada una de las cartas y les añadimos la clase 'show'.
-                letterCards.forEach(card => {
-                    card.classList.add('show');
-                });
-            }, 500); // 500 milisegundos = 0.5 segundos de espera
+        // Crear partículas con el movimiento del mouse
+        canvas.addEventListener('mousemove', (e) => {
+            for (let i = 0; i < 5; i++) {
+                particles.push(new Particle(e.x, e.y));
+            }
+        });
+
+        // Animación del fondo
+        function animateParticles() {
+            ctx.clearRect(0, 0, width, height);
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].size <= 0.3) {
+                    particles.splice(i, 1);
+                    i--;
+                }
+            }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // Función para el confeti
+        function createConfetti() {
+            const confettiContainer = document.body;
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = `${Math.random() * 100}vw`;
+                confetti.style.top = `${-20}px`;
+                confetti.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 70%)`;
+                confetti.style.animation = `fall ${Math.random() * 3 + 2}s linear ${Math.random() * 2}s forwards`;
+                confettiContainer.appendChild(confetti);
+            }
+        }
+        
+        // Keyframes para la animación del confeti
+        const styleSheet = document.createElement("style");
+        styleSheet.type = "text/css";
+        styleSheet.innerText = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(360deg);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(styleSheet);
+
+
+        // Evento al hacer clic en la caja
+        surpriseBox.addEventListener('click', () => {
+            if (surpriseBox.classList.contains('open')) return;
+
+            surpriseBox.classList.add('open');
+            createConfetti();
+
+            letters.forEach((letter, index) => {
+                setTimeout(() => {
+                    letter.style.opacity = '1';
+                    letter.style.transform = `translate(-50%, -${150 + index * 80}px) scale(1) rotate(${Math.random() * 20 - 10}deg)`;
+                }, index * 400);
+            });
         });
     </script>
-
 </body>
 </html>
